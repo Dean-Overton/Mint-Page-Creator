@@ -8,6 +8,16 @@ const cluster = "mainnet-beta";
 //TODO: change this to custom RPC
 const RPC = "https://api.mainnet-beta.solana.com";
 
+//what needs to come from web form for this script
+/*
+projectname
+favicon
+logo192.png
+bgimg
+mobilebgimg
+color for title on bg
+*/
+
 const writeToFileByReplacing = (fileName, lineNumber, replacementString) =>{
     var data = fs.readFileSync(fileName).toString().split("\n");
     data.splice(lineNumber, 1, replacementString);
@@ -18,113 +28,138 @@ const writeToFileByReplacing = (fileName, lineNumber, replacementString) =>{
     });
 }
 
-const addContent = () => {
-    //can edit specific lines
-    //https://stackoverflow.com/questions/30711184/how-can-i-change-a-specific-line-in-a-file-with-node-js
+const addContent = (discordLink, twitterLink, projectName, projectDescription, mintTime) => {
+    //mintTime has to be format: '30 Jan 2022 06:34:00 GMT'
 
     //examples:
     //title/info
-    writeToFileByReplacing("./src/pages/Mint.tsx", 74, "<h1>hey 1234</h1>");
-    writeToFileByReplacing("./src/pages/Mint.tsx", 76, "<h2 style={{fontSize:\"2em\"}}>1,234 available</h2>");
+    writeToFileByReplacing("./src/pages/Mint.tsx", 74, `<h1>${projectName}</h1>`);
+    writeToFileByReplacing("./src/pages/Mint.tsx", 76, `<h2 style={{fontSize:\"2em\"}}>${projectDescription}</h2>`);
     
     //social medias: 
-    writeToFileByReplacing("./src/pages/MintNav.tsx", 16, "<a href=\"https://discord.gg/pXHKsJB9Sq\">");
-    writeToFileByReplacing("./src/pages/MintNav.tsx", 21, "<a href=\"https://twitter.com/koolkoalasnft\">");
-    
-    //colours of button, navbar highlights: navbar.tsx, navbar.css
-    writeToFileByReplacing("./src/pages/Navbar.css", 
-                            53, 
-                            "color: #80b0fd;");
-    //for highlight of socials
-
-    //line 23: box-shadow: inset 0 -5px 0 0 #fba5d3;
-    writeToFileByReplacing("./src/pages/Navbar.css", 
-                            22, 
-                            "box-shadow: inset 0 -5px 0 0 #fba5d3;");
-
-    //line: 58 for actual colour color: #292929;
-    writeToFileByReplacing("./src/pages/Navbar.css", 
-                            57, 
-                            "color: #292929;");
-
-    // connect button color: Minter.tsx
-    // background: red; line 43
-    writeToFileByReplacing("./src/pages/Minting/Minter.tsx", 
-                            42, 
-                            " background: red;");
-    // color: white; line 44
-    writeToFileByReplacing("./src/pages/Minting/Minter.tsx", 
-                            43, 
-                            "color: white;");
-
-    // mint button color: MintButton.tsx
-    // background: red; line 17
-    writeToFileByReplacing("./src/pages/Minting/MintButton.tsx", 
-                            16, 
-                            "background: red;");
-    // color: white; line 18
-    writeToFileByReplacing("./src/pages/Minting/MintButton.tsx", 
-                            17, 
-                            "color: white;");
+    writeToFileByReplacing("./src/pages/MintNav.tsx", 16, `<a href=\"${discordLink}\">`);
+    writeToFileByReplacing("./src/pages/MintNav.tsx", 21, `<a href=\"${twitterLink}\">`);
     
     //chuck in time for countdown: userSettings.tsx
     //line: 59 countdownTo: date("30 Jan 2022 06:34:00 GMT"),
     writeToFileByReplacing("./src/pages/Minting/userSettings.tsx", 
                             58, 
-                            "countdownTo: date(\"30 Jan 2022 06:34:00 GMT\"),");
+                            `countdownTo: date(\"${mintTime}\"),`);
     //line 140: startDate: date("30 Jan 2022 06:34:00 GMT"),
     writeToFileByReplacing("./src/pages/Minting/userSettings.tsx", 
                             139, 
-                            "startDate: date(\"30 Jan 2022 06:34:00 GMT\"),");
+                            `startDate: date(\"${mintTime}\"),`);
 }
 
-const styleWebsite = () => {
+const styleWebsite = (highlightColour, socialsColour, mintColour, mintTextColour) => {
+    //TODO:
+    //move font file into file
+    
     //bg images in css: index.css
     //background-image: url(images/hero.png); line-150
-    writeToFileByReplacing("./src/index.css", 
-                            149, 
-                            "background-image: url(images/hero.png);");
-    //background-image: url(images/heroMobile.png); line-203
-    writeToFileByReplacing("./src/index.css", 
-                            202, 
-                            "background-image: url(images/heroMobile.png);");
+    // writeToFileByReplacing("./src/index.css", 
+    //                         149, 
+    //                         "background-image: url(images/hero.png);");
+    // //background-image: url(images/heroMobile.png); line-203
+    // writeToFileByReplacing("./src/index.css", 
+    //                         202, 
+    //                         "background-image: url(images/heroMobile.png);");
+
+    //colours of button, navbar highlights: navbar.tsx, navbar.css
+    writeToFileByReplacing("./src/pages/Navbar.css", 
+            53, 
+            `color: ${highlightColour};`);
+    //for highlight of socials
+
+    //line 23: box-shadow: inset 0 -5px 0 0 #fba5d3;
+    //TODO: add this back after
+    // writeToFileByReplacing("./src/pages/Navbar.css", 
+    //         22, 
+    //         "box-shadow: inset 0 -5px 0 0 #fba5d3;");
+
+    //line: 58 for actual colour of socials color: #292929;
+    writeToFileByReplacing("./src/pages/Navbar.css", 
+            57, 
+            `color: ${socialsColour};`);
+
+    // connect button color: Minter.tsx
+    // background: red; line 43
+    writeToFileByReplacing("./src/pages/Minting/Minter.tsx", 
+            42, 
+            `background: ${mintColour};`);
+    // color: white; line 44
+    writeToFileByReplacing("./src/pages/Minting/Minter.tsx", 
+            43, 
+            `color: ${mintTextColour};`);
+
+    // mint button color: MintButton.tsx
+    // background: red; line 17
+    writeToFileByReplacing("./src/pages/Minting/MintButton.tsx", 
+            16, 
+            `background: ${mintColour};`);
+    // color: white; line 18
+    writeToFileByReplacing("./src/pages/Minting/MintButton.tsx", 
+            17, 
+            "color: white;");
 
     //color: #292929; line: 159 this is the colour of the title/info
     writeToFileByReplacing("./src/index.css", 
-                            158, 
-                            "color: #292929;");
+            158, 
+            `color: ${mintTextColour};`);
 }
 
-const updateIndexHTMLandManifest = () => {
+const updateIndexHTMLandManifest = (projectName) => {
     //change index.html
     //line 10: content="The official Kool Koalas minting website."
-    writeToFileByReplacing("./public/index.css", 
+    writeToFileByReplacing("./public/index.html", 
                             9, 
-                            "content=\"The official Kool Koalas minting website.\"");
+                            `content=\"The official ${projectName} minting website.\"`);
     //line 38: <title>Kool Koalas</title>
-    writeToFileByReplacing("./public/index.css", 
+    writeToFileByReplacing("./public/index.html", 
                             37, 
-                            "<title>Kool Koalas</title>");
+                            `<title>${projectName}</title>`);
 
     //change manifest.json
     //"short_name", "name" in json object
     writeToFileByReplacing("./public/manifest.json", 
                             1, 
-                            "color: #292929;");
+                            `"short_name": "${projectName}"`);
     writeToFileByReplacing("./public/manifest.json", 
                             2, 
-                            "color: #292929;");
+                            `"short_name": "${projectName} NFT"`);
 }
 
-const addFavicon = () => {
+const addImages = (walletAddress) => {
+    //from ./submitted/walletAddress to new places and delete folder then
+
+    //move bg images to correct place: ./src/images/hero(Mobile).png
+
     // move favicon and rename
     //favicon.ico
 
     // move logo192.png
 }
 
-const writeWebsiteUsingSuppliedData = () => {
-    // addFavicon();
+const readInAllData = (walletAddress) => {
+    fs.readFile(`./submitted/${walletAddress}/data.json`, "utf8", (err, jsonString) => {
+        if (err) {
+          console.log("Error reading data.json from disk:", err);
+          return;
+        }
+        try {
+          const data = JSON.parse(jsonString);
+          console.log("Data read in for address :", walletAddress, data); // => "Customer address is: Infinity Loop Drive"
+          return data;
+        } catch (err) {
+          console.log("Error parsing JSON string:", err);
+          process.exit(1);
+        }
+      });    
+}
+
+const writeWebsiteUsingSuppliedData = (walletAddress) => {
+    let data = readInAllData(walletAddress); 
+    addImages();
     updateIndexHTMLandManifest();
     styleWebsite();
     addContent();
@@ -211,6 +246,6 @@ const buildWebsite = (projectName, candyMachineID) => {
         });
 }
 
-websiteBuilder("test", "1234");
+buildWebsite("test", "1234");
 
 module.exports = { websiteBuilder };

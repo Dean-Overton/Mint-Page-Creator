@@ -1,5 +1,7 @@
 //candy machine builder
 
+//need to work out the inputs
+
 const buildCandyMachine = () => {
     //move art into ./assets
 
