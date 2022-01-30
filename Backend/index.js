@@ -3,6 +3,7 @@ const app = express()
 const port = 3000
 const websiteBuilder = require("./websiteBuilder")
 
+//this statically serves the public file, probbaly how to serve REACT build?
 app.use(express.static("public"));
 
 app.post('/submit', (req, res) => {
