@@ -159,17 +159,25 @@ const readInAllData = (walletAddress) => {
 
 const writeWebsiteUsingSuppliedData = (walletAddress) => {
     let data = readInAllData(walletAddress); 
-    addImages();
-    updateIndexHTMLandManifest();
-    styleWebsite();
-    addContent();
-}
+    addImages(walletAddress);
+    updateIndexHTMLandManifest(data["projectName"]);
+    styleWebsite(data["highlightColour"], 
+                 data["socialsColour"], 
+                 data["mintColour"], 
+                 data["mintTextColour"]);
+    addContent(data["discordLink"], 
+                data["twitterLink"], 
+                data["projectName"], 
+                data["projectDescription"], 
+                data["mintTime"]
+                );
+            }
 
-const buildWebsite = (projectName, candyMachineID) => {
+const buildWebsite = (walletAddress, candyMachineID) => {
     // create new branch
 
     //git checkout -b projectName
-    exec(`git checkout -b ${projectName}`,
+    exec(`git checkout -b ${walletAddress}`,
         function (error, stdout, stderr) {
             //should handle this
             console.log('stdout: ' + stdout);
@@ -191,7 +199,7 @@ const buildWebsite = (projectName, candyMachineID) => {
     }
 
     // add all files and values in code
-    writeWebsiteUsingSuppliedData();
+    writeWebsiteUsingSuppliedData(walletAddress);
 
     // git add ., commit and push to our repo
     // git add .
@@ -219,7 +227,7 @@ const buildWebsite = (projectName, candyMachineID) => {
         });
 
     // git push --set-upstream origin ${projectName}
-    exec(`git push --set-upstream origin ${projectName}`,
+    exec(`git push --set-upstream origin ${walletAddress}`,
         function (error, stdout, stderr) {
             //should handle this
             // console.log('stdout: ' + stdout);

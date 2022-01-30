@@ -2,19 +2,17 @@
 import buildCandyMachine from "./candyMachineBuilder";
 import buildWebsite from "./websiteBuilder"
 
-const processOrder = () => {
-    let projectName = "";
+const processOrder = (walletAddress) => {
+    let candyMachineID = buildCandyMachine(walletAddress);
 
-    let candyMachineID = buildCandyMachine();
-
-    let url = buildWebsite(projectName, candyMachineID);
+    let url = buildWebsite(walletAddress, candyMachineID);
 
     //email orderer the URL and candymachine id for verifying on marketplaces
 
     return true;
 }
 
-// const withDraw = (address) => {
+// const withDraw = (walletAddress) => {
 //     // send 90% to their wallet
 
 //     // send remainder to main wallet
@@ -22,7 +20,7 @@ const processOrder = () => {
 //     // withdraw and send this to main wallet
 // }
 
-// const updateCandyMachine = () => {
+// const updateCandyMachine = (walletAddress) => {
 //     // get correct .cache, config and keypair
 
 //     // update config
