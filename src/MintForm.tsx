@@ -27,10 +27,18 @@ const useStyles = makeStyles((theme) => ({
 export const MintForm: React.FC<Props> = ({onSubmit}) => {
     const backDropImage = useRef<HTMLInputElement>(null);
     const [collectionName, setCollectionName] = React.useState("");
+    const [collectionDescription, setCollectionDescription] = React.useState("");
+    const [collectionMintTime, setCollectionMintTime] = React.useState("");
     const [domain, setDomain] = React.useState("");
     const [email, setEmail] = React.useState("");
-    const [color, setColor] = React.useState(createColor("red"));
-    const [colorSecond, setColorSecond] = React.useState(createColor("red"));
+    const [discordInviteCode, setDiscordInviteCode] = React.useState("");
+    const [twitterUsername, setTwitterUsername] = React.useState("");
+
+    const [highlightsColour, setHighlightsColour] = React.useState(createColor("grey"));
+    const [socialsColour, setSocialsColour] = React.useState(createColor("pink"));
+    const [mintColour, setMintColour] = React.useState(createColor("red"));
+    const [mintTextColour, setMintTextColour] = React.useState(createColor("red"));
+
     const fileRef = useRef<HTMLInputElement>(null);
     //const isSubmitting = React.useState(false);
       
@@ -98,26 +106,60 @@ export const MintForm: React.FC<Props> = ({onSubmit}) => {
                     
                     <Typography style={{display: 'block', marginTop: '20px'}}>Select Colour Scheme</Typography>
                     <div style={{display: 'inline-block'}}>
-                        <ColorPicker 
-                            value={color} 
-                            onChange={(newValue) => {
-                                console.log("change", newValue);
-                                // setColor(`#${newValue.hex}`);
-                                setColor(newValue as Color);
-                                // action('changed')(newValue);
-                            }}
-                        />
+                        <Typography variant="caption" style={{display: 'block', marginTop: '20px'}}>Highlighted Socials Colour</Typography>
+                        <div>
+                            <ColorPicker 
+                                value={highlightsColour} 
+                                onChange={(newValue) => {
+                                    console.log("change", newValue);
+                                    // setColor(`#${newValue.hex}`);
+                                    setHighlightsColour(newValue as Color);
+                                    // action('changed')(newValue);
+                                }}
+                            />
+                        </div>
                     </div>
                     <div style={{display: 'inline-block'}}>
-                        <ColorPicker 
-                            value={colorSecond} 
+                        <Typography variant="caption" style={{display: 'block', marginTop: '20px'}}>Social Links Colour</Typography>
+                        <div>
+                            <ColorPicker 
+                            value={socialsColour} 
                             onChange={(newValue) => {
                                 console.log("change", newValue);
                                 // setColor(`#${newValue.hex}`);
-                                setColorSecond(newValue as Color);
+                                setSocialsColour(newValue as Color);
                                 // action('changed')(newValue);
                             }}
                         />
+                        </div>
+                    </div>
+                    <div style={{display: 'inline-block'}}>
+                        <Typography variant="caption" style={{display: 'block', marginTop: '20px'}}>Mint Colour</Typography>
+                        <div>
+                            <ColorPicker 
+                                value={mintColour} 
+                                onChange={(newValue) => {
+                                    console.log("change", newValue);
+                                    // setColor(`#${newValue.hex}`);
+                                    setMintColour(newValue as Color);
+                                    // action('changed')(newValue);
+                                }}
+                            />
+                        </div>
+                    </div>
+                    <div style={{display: 'inline-block'}}>
+                        <Typography variant="caption" style={{display: 'block', marginTop: '20px'}}>Mint Text Colour</Typography>
+                        <div>
+                            <ColorPicker 
+                                value={mintTextColour} 
+                                onChange={(newValue) => {
+                                    console.log("change", newValue);
+                                    // setColor(`#${newValue.hex}`);
+                                    setMintTextColour(newValue as Color);
+                                    // action('changed')(newValue);
+                                }}
+                            />
+                        </div>
                     </div>
 
                     <Typography style={{display: 'block', marginTop: '20px'}}>Contact</Typography>
