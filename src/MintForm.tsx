@@ -1,9 +1,10 @@
-import { Button, Card, Container, FormControlLabel, Switch, TextField, Typography, Alert, Snackbar } from '@mui/material';
-import { Box } from '@mui/system';
+import { Button, Card, Container, FormControlLabel, Switch, TextField, Typography} from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Formik, Form, useFormik } from 'formik';
 import * as React from 'react';
 import { useRef } from 'react';
-import { AlertState } from "./utils";
+import { Color, ColorPicker, createColor } from 'mui-color';
 import PreviewImage from './PreviewImage';
 
 interface Values {
@@ -16,46 +17,47 @@ interface Values {
 interface Props {
     onSubmit: (values: Values) => void;
 }
+const theme = createTheme();
+const useStyles = makeStyles((theme) => ({
+    inputBox: {
+        margin: '20px',
+    }, // a style rule
+}));
+
 export const MintForm: React.FC<Props> = ({onSubmit}) => {
+    const backDropImage = useRef<HTMLInputElement>(null);
     const [collectionName, setCollectionName] = React.useState("");
     const [domain, setDomain] = React.useState("");
     const [email, setEmail] = React.useState("");
+    const [color, setColor] = React.useState(createColor("red"));
+    const [colorSecond, setColorSecond] = React.useState(createColor("red"));
     const fileRef = useRef<HTMLInputElement>(null);
-    const isSubmitting = React.useState(false);
-    
-    const [alertState, setAlertState] = React.useState<AlertState>({
-        open: false,
-        message: "",
-        severity: undefined,
-      });
+    //const isSubmitting = React.useState(false);
       
     const Submit = (values: Values) => {
         // This will run when the form is submitted
         onSubmit(values);
 
-        setAlertState({
-            open: true,
-            message: "Congratulations! Page "+ values.domain + " bought and set up!",
-            severity: "success",
-          });
-
         console.log(values);
     };
+    const classes = useStyles();
     return (
         <Container maxWidth="sm">
             <Formik 
-                initialValues={{backDropImage: null, collectionName: "", domain: "5", email: "", iconImage: null}} 
+                initialValues={{backDropImage: null, collectionName: "", domain: "", email: "", iconImage: null}} 
                 onSubmit={Submit}
             >{({ values, setFieldValue }) => (
                 <Form>
-                    <Typography>Collection Name</Typography>
+                    <Typography style={{display: 'block', marginTop: '20px'}}>Collection Name</Typography>
                     <TextField 
                         name='collectionName'
                         onChange={(event) => {
-                            setFieldValue("iconImage", event.target.value);
+                            setFieldValue("collectionName", event.target.value);
                         }}
+                        style={{display: 'block'}}
                     />
-                    <Typography>Select Icon</Typography>
+                    
+                    <Typography style={{display: 'block', marginTop: '20px'}}>Select Icon</Typography>
                     <Button 
                         variant="outlined" 
                         component="label" 
@@ -77,7 +79,7 @@ export const MintForm: React.FC<Props> = ({onSubmit}) => {
                             }}
                         />
                     </Button>
-                    <Typography>Select Backdrop</Typography>
+                    <Typography style={{display: 'block', marginTop: '20px'}}>Select Backdrop</Typography>
                     <Button variant="outlined" component="label">
                         Upload Backdrop
                         <input
@@ -90,8 +92,35 @@ export const MintForm: React.FC<Props> = ({onSubmit}) => {
                                     setFieldValue("backDropImage", event.target.files![0]);
                                 }
                             }}
+                            style={{marginTop: '20px'}}
                         />
                     </Button>
+                    
+                    <Typography style={{display: 'block', marginTop: '20px'}}>Select Colour Scheme</Typography>
+                    <div style={{display: 'inline-block'}}>
+                        <ColorPicker 
+                            value={color} 
+                            onChange={(newValue) => {
+                                console.log("change", newValue);
+                                // setColor(`#${newValue.hex}`);
+                                setColor(newValue as Color);
+                                // action('changed')(newValue);
+                            }}
+                        />
+                    </div>
+                    <div style={{display: 'inline-block'}}>
+                        <ColorPicker 
+                            value={colorSecond} 
+                            onChange={(newValue) => {
+                                console.log("change", newValue);
+                                // setColor(`#${newValue.hex}`);
+                                setColorSecond(newValue as Color);
+                                // action('changed')(newValue);
+                            }}
+                        />
+                    </div>
+
+                    <Typography style={{display: 'block', marginTop: '20px'}}>Contact</Typography>
                     <TextField 
                             name='email'
                             onChange={(event) => {
@@ -100,19 +129,19 @@ export const MintForm: React.FC<Props> = ({onSubmit}) => {
                             label="Email"
                             style={{display: 'block'}}
                         />
-                    <Box>
+                    <div style={{display: 'flex', alignItems: 'center'}}>
                         <TextField 
                             name='domain'
                             onChange={(event) => {
                                 setFieldValue("domain", event.target.value);
                             }}
                             label="Your domain name"
-                            defaultValue="yourawesomenft.heroku.com"
-                            style={{display:'inline-block'}}
+                            defaultValue="yourawesomenft"
+                            style={{display:'inline-block', marginTop:'20px'}}
                         />
-                        <Typography style={{display: "inline-block"}}>.heroku.com</Typography>
-                    </Box>
-                    <Card hidden variant="outlined" style={{padding: '20px', margin: '10px'}}>
+                        <Typography style={{display: 'inline-block', marginLeft: '10px'}}>.heroku.com</Typography>
+                    </div>
+                    <Card hidden variant="outlined" style={{padding: '20px', marginTop: '10px'}}>
                         <Typography>Domain Registration Contact</Typography>
                         <TextField 
                             name='email'
@@ -153,18 +182,6 @@ export const MintForm: React.FC<Props> = ({onSubmit}) => {
                     </div>
                 </Form>
             )}</Formik>
-            <Snackbar
-                open={alertState.open}
-                autoHideDuration={6000}
-                onClose={() => setAlertState({ ...alertState, open: false })}
-            >
-                <Alert
-                onClose={() => setAlertState({ ...alertState, open: false })}
-                severity={alertState.severity}
-                >
-                {alertState.message}
-                </Alert>
-            </Snackbar>
         </Container>
     )
 }
