@@ -1,3 +1,15 @@
+Resource for handling post requests to server
+https://masteringjs.io/tutorials/express/post
+https://code.tutsplus.com/tutorials/file-upload-with-multer-in-node--cms-32088
+Suggestion to use MongoDB or other db for storing images even?
+
+https://www.sitepoint.com/forms-file-uploads-security-node-express/
+Also quoting the above site:
+"Because of the additional complexities of working with multipart and file uploads, they’re often kept in separate forms."
+
+or maybe thos would help:
+https://www.npmjs.com/package/formidable
+
 From the frontend and server the website builder/Candy machine builder
 expects a number of files. 
 
