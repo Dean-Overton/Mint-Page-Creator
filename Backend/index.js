@@ -9,8 +9,8 @@ const multer = require("multer")
 const app = express()
     
 // View Engine Setup
-app.set("views",path.join(__dirname,"views"))
-app.set("view engine","ejs")
+// app.set("views",path.join(__dirname,"views"))
+// app.set("view engine","ejs")
 
 // Parse JSON bodies for this app. Make sure you put
 // `app.use(express.json())` **before** your route handlers!
@@ -18,71 +18,68 @@ app.use(express.json());
 
 //then can just get req.body as json object in post requests
     
-// var upload = multer({ dest: "Upload_folder_name" })
-// If you do not want to use diskStorage then uncomment it
-    
-var storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-  
-        // Uploads is the Upload_folder_name
-        cb(null, "uploads")
-    },
-    filename: function (req, file, cb) {
-      cb(null, file.fieldname + "-" + Date.now()+".jpg")
-    }
-  })
-       
-// Define the maximum size for uploading
-// picture i.e. 1 MB. it is optional
-const maxSize = 1 * 1000 * 1000;
-    
-var upload = multer({ 
-    storage: storage,
-    limits: { fileSize: maxSize },
-    fileFilter: function (req, file, cb){
-    
-        // Set the filetypes, it is optional
-        var filetypes = /jpeg|jpg|png/;
-        var mimetype = filetypes.test(file.mimetype);
-  
-        var extname = filetypes.test(path.extname(
-                    file.originalname).toLowerCase());
-        
-        if (mimetype && extname) {
-            return cb(null, true);
-        }
-      
-        cb("Error: File upload only supports the "
-                + "following filetypes - " + filetypes);
-      } 
-  
-// mypic is the name of file attribute
-}).single("bgimg");       
-  
-app.get("/",function(req,res){
-    res.render("Signup");
-})
-    
-app.post("/submit",function (req, res, next) {
-        
-    // Error MiddleWare for multer file upload, so if any
-    // error occurs, the image would not be uploaded!
+var mime    =   require('mime');
+var fs = require('fs');
+// var bodyParser =	require("body-parser");
+// app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.json());
+
+var storage	=	multer.diskStorage({
+  destination: function (req, file, callback) {
+    callback(null, `./uploads`);
+  },
+  filename: function (req, file, callback) {
+    callback(null, file.originalname);
+  }
+});
+
+// + '-' + Date.now() + '.' + mime.extension(file.mimetype)
+
+var upload = multer({ storage : storage }).array('userPic');
+
+app.get('/completeForm', function(req, res){
+	res.sendFile(__dirname + '/' + 'completeForm.html')
+});
+
+app.post("/postFormAct", function (req, res, next) {
     upload(req,res,function(err) {
-  
-        if(err) {
-  
-            // ERROR occured (here it can be occured due
-            // to uploading image of size greater than
-            // 1MB or uploading different file type)
-            res.send(err)
+        console.log(req.files);
+        // console.log(req.body.user); 
+	    console.log(req.body);
+        
+        const dir = `./submitted/${req.body.wallet}`;
+        
+        //checks if directory already exists or not
+        if (!fs.existsSync(dir)){
+            fs.mkdirSync(dir, { recursive: true });
         }
-        else {
-  
-            // SUCCESS, image successfully uploaded
-            res.send("Success, Image uploaded!")
+        else{
+            res.send("That wallet has already created a website!");
         }
-    })
-})
+
+        for(let i=0; i < req.files.length; i++){
+            var fileName = req.files[i].filename;
+
+            //currently assumes all files are correctly named
+            fs.rename('./uploads/' + fileName, 
+            dir + '/' + fileName, 
+            function (err) {
+                if (err) {
+                    return console.error(err);
+                }
+    
+                // res.json({});
+            });
+        }
+
+        //create json data file
+
+        //start processing order
+    });
+
+    //redirects you back to same web form
+    res.sendFile(__dirname + '/' + 'completeForm.html'); 
+});
     
 // Take any port number of your choice which
 // is not taken by any other process
