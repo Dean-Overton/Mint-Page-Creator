@@ -35,7 +35,7 @@ var storage	=	multer.diskStorage({
 
 // + '-' + Date.now() + '.' + mime.extension(file.mimetype)
 
-var upload = multer({ storage : storage }).array('userPic');
+var upload = multer({ storage : storage }).array('img');
 
 app.get('/completeForm', function(req, res){
 	res.sendFile(__dirname + '/' + 'completeForm.html')
@@ -73,8 +73,11 @@ app.post("/postFormAct", function (req, res, next) {
         }
 
         //create json data file
+        let data = JSON.stringify(req.body);
+        fs.writeFileSync(`${dir}/data.json`, data);
 
         //start processing order
+        //inputs are all set up to call next functions
     });
 
     //redirects you back to same web form
