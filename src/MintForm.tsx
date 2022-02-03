@@ -5,6 +5,7 @@ import { Formik, Form, useFormik } from 'formik';
 import * as React from 'react';
 import { useRef } from 'react';
 import { Color, ColorPicker, createColor } from 'mui-color';
+//import DateTimePicker from '@mui/lab/Time';
 import PreviewImage from './PreviewImage';
 
 interface Values {
@@ -28,7 +29,9 @@ export const MintForm: React.FC<Props> = ({onSubmit}) => {
     const backDropImage = useRef<HTMLInputElement>(null);
     const [collectionName, setCollectionName] = React.useState("");
     const [collectionDescription, setCollectionDescription] = React.useState("");
-    const [collectionMintTime, setCollectionMintTime] = React.useState("");
+    const [collectionMintTime, setCollectionMintTime] = React.useState<Date | null>(
+        new Date('2022-02-18T00:00:00'),
+      );
     const [domain, setDomain] = React.useState("");
     const [email, setEmail] = React.useState("");
     const [discordInviteCode, setDiscordInviteCode] = React.useState("");
@@ -56,22 +59,32 @@ export const MintForm: React.FC<Props> = ({onSubmit}) => {
                 onSubmit={Submit}
             >{({ values, setFieldValue }) => (
                 <Form>
-                    <Typography style={{display: 'block', marginTop: '20px'}}>Collection Name</Typography>
+                    <Typography style={{display: 'block', margin: '20px 0px 10px 0px'}}>Collection Name</Typography>
                     <TextField 
                         name='collectionName'
                         onChange={(event) => {
                             setFieldValue("collectionName", event.target.value);
                         }}
+                        required
+                        label='Collection Name'
                         style={{display: 'block'}}
                     />
                     
-                    <Typography style={{display: 'block', marginTop: '20px'}}>Select Icon</Typography>
+                    {/* <DateTimePicker
+                        label="Launch Date"
+                        value={collectionMintTime}
+                        onChange={(time) =>  {
+
+                        }}
+                        renderInput={(params) => <TextField {...params} />}
+                    /> */}
                     <Button 
                         variant="outlined" 
                         component="label" 
                         onClick={() => { 
                             fileRef.current?.click();
                         }}
+                        style={{margin: '30px 5px 10px 5px'}}
                     >
                         Upload Icon
                         <input
@@ -80,6 +93,7 @@ export const MintForm: React.FC<Props> = ({onSubmit}) => {
                             hidden
                             id="raised-button-file"
                             type="file"
+                            required
                             onChange={(event) => {
                                 if(event.target.files != null) {
                                     setFieldValue("iconImage", event.target.files![0]);
@@ -87,24 +101,23 @@ export const MintForm: React.FC<Props> = ({onSubmit}) => {
                             }}
                         />
                     </Button>
-                    <Typography style={{display: 'block', marginTop: '20px'}}>Select Backdrop</Typography>
-                    <Button variant="outlined" component="label">
+                    <Button variant="outlined" component="label" style={{margin: '30px 5px 10px 20px'}}>
                         Upload Backdrop
                         <input
                             accept="image/jpeg"
                             hidden
                             id="raised-button-file"
                             type="file"
+                            required
                             onChange={(event) => {
                                 if(event.target.files != null) {
                                     setFieldValue("backDropImage", event.target.files![0]);
                                 }
                             }}
-                            style={{marginTop: '20px'}}
                         />
                     </Button>
                     
-                    <Typography style={{display: 'block', marginTop: '20px'}}>Select Colour Scheme</Typography>
+                    <Typography style={{display: 'block', margin: '20px 5px 10px 5px'}}>Select Colour Scheme</Typography>
                     <div style={{display: 'inline-block'}}>
                         <Typography variant="caption" style={{display: 'block', marginTop: '20px'}}>Highlighted Socials Colour</Typography>
                         <div>
@@ -121,20 +134,20 @@ export const MintForm: React.FC<Props> = ({onSubmit}) => {
                     </div>
                     <div style={{display: 'inline-block'}}>
                         <Typography variant="caption" style={{display: 'block', marginTop: '20px'}}>Social Links Colour</Typography>
-                        <div>
-                            <ColorPicker 
-                            value={socialsColour} 
-                            onChange={(newValue) => {
-                                console.log("change", newValue);
-                                // setColor(`#${newValue.hex}`);
-                                setSocialsColour(newValue as Color);
-                                // action('changed')(newValue);
-                            }}
-                        />
-                        </div>
+                            <div>
+                                <ColorPicker 
+                                    value={socialsColour} 
+                                    onChange={(newValue) => {
+                                        console.log("change", newValue);
+                                        // setColor(`#${newValue.hex}`);
+                                        setSocialsColour(newValue as Color);
+                                        // action('changed')(newValue);
+                                    }}
+                                />
+                            </div>
                     </div>
                     <div style={{display: 'inline-block'}}>
-                        <Typography variant="caption" style={{display: 'block', marginTop: '20px'}}>Mint Colour</Typography>
+                        <Typography variant="caption" style={{display: 'block', marginTop: '10px'}}>Mint Colour</Typography>
                         <div>
                             <ColorPicker 
                                 value={mintColour} 
@@ -148,7 +161,7 @@ export const MintForm: React.FC<Props> = ({onSubmit}) => {
                         </div>
                     </div>
                     <div style={{display: 'inline-block'}}>
-                        <Typography variant="caption" style={{display: 'block', marginTop: '20px'}}>Mint Text Colour</Typography>
+                        <Typography variant="caption" style={{display: 'block', marginTop: '10px'}}>Mint Text Colour</Typography>
                         <div>
                             <ColorPicker 
                                 value={mintTextColour} 
@@ -162,24 +175,28 @@ export const MintForm: React.FC<Props> = ({onSubmit}) => {
                         </div>
                     </div>
 
-                    <Typography style={{display: 'block', marginTop: '20px'}}>Contact</Typography>
+                    <Typography style={{display: 'block', margin: '20px 5px 10px 5px'}}>Contact</Typography>
                     <TextField 
-                            name='email'
-                            onChange={(event) => {
-                                setFieldValue("email", event.target.value);
-                            }}
-                            label="Email"
-                            style={{display: 'block'}}
-                        />
-                    <div style={{display: 'flex', alignItems: 'center'}}>
+                        name='email'
+                        onChange={(event) => {
+                            setFieldValue("email", event.target.value);
+                        }}
+                        required
+                        label="Email"
+                        style={{display: 'block'}}
+                    />
+
+                    <Typography style={{textAlign: 'center', display: 'block', margin: '20px 5px 10px 5px'}}>Domain Registration</Typography>
+                    <div style={{display: 'flex', alignItems: 'center', justifyContent:'center'}}>
                         <TextField 
                             name='domain'
                             onChange={(event) => {
                                 setFieldValue("domain", event.target.value);
                             }}
                             label="Your domain name"
-                            defaultValue="yourawesomenft"
-                            style={{display:'inline-block', marginTop:'20px'}}
+                            defaultValue=""
+                            required
+                            style={{display:'inline-block'}}
                         />
                         <Typography style={{display: 'inline-block', marginLeft: '10px'}}>.heroku.com</Typography>
                     </div>
@@ -216,7 +233,7 @@ export const MintForm: React.FC<Props> = ({onSubmit}) => {
                         />
                         <FormControlLabel style={{margin: '10px'}} control={<Switch defaultChecked aria-label='WHOIS PRIVACY'/>} label="WHOIS PRIVACY" />
                     </Card>
-                    <div>
+                    <div style={{marginTop: '20px'}}>
                         <Typography style={{display:'inline-block', padding: '20px'}}>Price: 0.6 SOL</Typography>
                         <Button variant="contained" type="submit" style={{display:'inline-block', margin: '5px', padding: '10px'}}>
                             Buy Minting Website!
