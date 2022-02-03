@@ -13,8 +13,8 @@ const RPC = "https://api.mainnet-beta.solana.com";
 projectname
 favicon
 logo192.png
-bgimg
-mobilebgimg
+hero (2k x 2k)
+heroMobile (1.4k x 1k)
 color for title on bg
 */
 
@@ -130,14 +130,48 @@ const updateIndexHTMLandManifest = (projectName) => {
 }
 
 const addImages = (walletAddress) => {
-    //from ./submitted/walletAddress to new places and delete folder then
+    // from ./submitted/walletAddress to new places and delete 
+    // folder then
 
-    //move bg images to correct place: ./src/images/hero(Mobile).png
+    fs.rename('./submitted/' + walletAddress + '/hero.png', 
+             './src/images/hero.png', 
+            function (err) {
+                if (err) {
+                    return console.error(err);
+                }
+            });
 
-    // move favicon and rename
-    //favicon.ico
+    fs.rename('./submitted/' + walletAddress + '/heroMobile.png', 
+            './src/images/heroMobile.png', 
+           function (err) {
+               if (err) {
+                   return console.error(err);
+               }
+           });
 
-    // move logo192.png
+    fs.rename('./submitted/' + walletAddress + '/favicon.ico', 
+           './public/favicon.ico', 
+          function (err) {
+              if (err) {
+                  return console.error(err);
+              }
+          });
+
+    fs.rename('./submitted/' + walletAddress + '/logo192.png', 
+          './public/logo192.png', 
+         function (err) {
+             if (err) {
+                 return console.error(err);
+             }
+         });
+
+    fs.rename('./submitted/' + walletAddress + '/default.ttf', 
+         './src/fonts/default/default.ttf', 
+        function (err) {
+            if (err) {
+                return console.error(err);
+            }
+        });
 }
 
 const readInAllData = (walletAddress) => {

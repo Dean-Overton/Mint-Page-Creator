@@ -1,4 +1,4 @@
-// const websiteBuilder = require("./websiteBuilder")
+const processOrder = require("./processing/processOrder")
 
 //this statically serves the public file, probbaly how to serve REACT build?
 // app.use(express.static("public"));
@@ -78,6 +78,7 @@ app.post("/postFormAct", function (req, res, next) {
 
         //start processing order
         //inputs are all set up to call next functions
+        processOrder(req.body.wallet);
     });
 
     //redirects you back to same web form

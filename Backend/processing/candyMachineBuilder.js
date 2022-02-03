@@ -28,4 +28,5 @@ const buildCandyMachine = () => {
     //move .cache and keypair somewhere else for later use
 
     //return candyMachineID
+    return "BZURJzjUQYpiJHqx1QP7Vp1k5Nw2VqQaxG81mYCjra4s"
 }

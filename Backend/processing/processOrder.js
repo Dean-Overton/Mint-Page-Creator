@@ -1,6 +1,6 @@
 //processOrder
 import buildCandyMachine from "./candyMachineBuilder";
-import buildWebsite from "./websiteBuilder"
+import buildWebsite from "./FiverrSolanaMintTemplate/websiteBuilder"
 
 const processOrder = (walletAddress) => {
     let candyMachineID = buildCandyMachine(walletAddress);
@@ -8,6 +8,8 @@ const processOrder = (walletAddress) => {
     let url = buildWebsite(walletAddress, candyMachineID);
 
     //email orderer the URL and candymachine id for verifying on marketplaces
+
+    console.log("new git branch was created!!!")
 
     return true;
 }
